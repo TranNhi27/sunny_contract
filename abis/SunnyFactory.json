@@ -38,17 +38,11 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "creator",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "activityContract",
+        "name": "newImplementation",
         "type": "address"
       }
     ],
-    "name": "ActivityContractCreated",
+    "name": "ImplementationUpgraded",
     "type": "event"
   },
   {
@@ -57,11 +51,17 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "newImplementation",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "masterContract",
         "type": "address"
       }
     ],
-    "name": "ImplementationUpgraded",
+    "name": "MasterContractCreated",
     "type": "event"
   },
   {
@@ -84,25 +84,6 @@
     "type": "event"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "activityContracts",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "beacon",
     "outputs": [
@@ -121,9 +102,14 @@
         "internalType": "address",
         "name": "owner",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "activityManager",
+        "type": "address"
       }
     ],
-    "name": "createActivityContract",
+    "name": "createMasterContract",
     "outputs": [
       {
         "internalType": "address",
@@ -136,12 +122,31 @@
   },
   {
     "inputs": [],
-    "name": "getActivityContracts",
+    "name": "getMasterContracts",
     "outputs": [
       {
         "internalType": "address[]",
         "name": "",
         "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "masterContracts",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

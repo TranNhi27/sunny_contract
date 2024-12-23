@@ -1,21 +1,21 @@
 require("dotenv").config();
 const { ethers } = require("ethers");
-const contractABI = require("../abis/SunnySide.json");
+const pointABI = require("../abis/PointManagement.json");
 
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
+const POINT_BEACON = process.env.POINT_BEACON;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const RPC_URL = process.env.RPC_URL;
 
-if (!CONTRACT_ADDRESS || !PRIVATE_KEY || !RPC_URL) {
+if (!POINT_BEACON || !PRIVATE_KEY || !RPC_URL) {
   throw new Error("❌ Missing required environment variables.");
 }
 
 const provider = new ethers.JsonRpcProvider(RPC_URL);
 const ownerWallet = new ethers.Wallet(PRIVATE_KEY, provider);
 
-const sunnySideActivity = new ethers.Contract(
-  CONTRACT_ADDRESS,
-  contractABI,
+const pointManagement = new ethers.Contract(
+  POINT_BEACON,
+  pointABI,
   ownerWallet
 );
 
@@ -34,7 +34,7 @@ async function addPoints(user, activity, points) {
 
   try {
     // Call the addPoints function
-    const tx = await sunnySideActivity.addPoints(user, activity, points);
+    const tx = await pointManagement.addPoints(user, activity, points);
     console.log(`⏳ Transaction sent: ${tx.hash}`);
 
     const receipt = await tx.wait();

@@ -1,4 +1,9 @@
 {
-  "SunnyActivityModule#SunnySideActivity": "0x58B5A2426945F30851582963708077721308495a",
-  "SunnySideModule#SunnySideActivityFactory": "0xf91dCD5f7AF75a072fBC8E760811eCD6D5b3DC84"
+  "ActivityModule#ActivityManagement": "0x718710a7aF414A7844f14f75C029192de3B680DE",
+  "ImplModuleModule#PointManagement": "0xA98e52faEEd03edFeD0074b8ceeDd50eaC142EE6",
+  "ImplModuleModule#SunnysideMaster": "0xF011C149F1E12457db489251c5b586E77A5c412E",
+  "ImplModuleModule#UserManagement": "0x81aaD7B05c4788a7043c65287e9a3c1a7A8AE613",
+  "FactoryModule#PointManagementFactory": "0xFc247a6e1A3Ad31492f69fEEd5f6b3040AB62902",
+  "FactoryModule#SunnysideMasterFactory": "0x0632E30b59E4b64d5E27524Be15e1488B937306b",
+  "FactoryModule#UserManagementFactory": "0x705d06eC0ABEb8B037473E3624336e6B43f9DAe7"
 }

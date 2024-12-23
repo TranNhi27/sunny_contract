@@ -1,23 +1,19 @@
 require("dotenv").config();
 const { ethers } = require("ethers");
-const contractABI = require("../abis/SunnySide.json");
+const userABI = require("../abis/UserManagement.json");
 
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
+const USER_BEACON = process.env.USER_BEACON;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const RPC_URL = process.env.RPC_URL;
 
-if (!CONTRACT_ADDRESS || !PRIVATE_KEY || !RPC_URL) {
+if (!USER_BEACON || !PRIVATE_KEY || !RPC_URL) {
   throw new Error("❌ Missing required environment variables.");
 }
 
 const provider = new ethers.JsonRpcProvider(RPC_URL);
 const ownerWallet = new ethers.Wallet(PRIVATE_KEY, provider);
 
-const sunnySideActivity = new ethers.Contract(
-  CONTRACT_ADDRESS,
-  contractABI,
-  ownerWallet
-);
+const userManagement = new ethers.Contract(USER_BEACON, userABI, ownerWallet);
 
 async function addToWhitelist(user) {
   console.log(`🔍 Preparing to whitelist user...`);
@@ -25,7 +21,7 @@ async function addToWhitelist(user) {
 
   try {
     // Call the addToWhitelist function
-    const tx = await sunnySideActivity.addToWhitelist(user);
+    const tx = await userManagement.addToWhitelist(user);
     console.log(`⏳ Transaction sent: ${tx.hash}`);
 
     // Wait for the transaction to be mined
