@@ -1,67 +1,83 @@
 require("dotenv").config();
 const { ethers } = require("ethers");
-const contractABI = require("../abis/SunnySide.json");
 
-const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
+// Load environment variables
+const SUNNY_MASTER_ADDRESS = process.env.SUNNY_BEACON;
+const USER_MANAGEMENT_ADDRESS = process.env.USER_BEACON;
+const POINT_MANAGEMENT_ADDRESS = process.env.POINT_BEACON;
 const RPC_URL = process.env.RPC_URL;
 
-if (!CONTRACT_ADDRESS || !RPC_URL) {
+if (
+  !SUNNY_MASTER_ADDRESS ||
+  !USER_MANAGEMENT_ADDRESS ||
+  !POINT_MANAGEMENT_ADDRESS ||
+  !RPC_URL
+) {
   throw new Error("❌ Missing required environment variables.");
 }
 
-// Setup provider and contract
+// Load ABIs
+const sunnyMasterABI = require("../abis/SunnySide.json");
+const userManagementABI = require("../abis/UserManagement.json");
+const pointManagementABI = require("../abis/PointManagement.json");
+
+// Setup provider and contracts
 const provider = new ethers.JsonRpcProvider(RPC_URL);
-const sunnySideActivity = new ethers.Contract(
-  CONTRACT_ADDRESS,
-  contractABI,
+
+const sunnyMaster = new ethers.Contract(
+  SUNNY_MASTER_ADDRESS,
+  sunnyMasterABI,
+  provider
+);
+const userManagement = new ethers.Contract(
+  USER_MANAGEMENT_ADDRESS,
+  userManagementABI,
+  provider
+);
+const pointManagement = new ethers.Contract(
+  POINT_MANAGEMENT_ADDRESS,
+  pointManagementABI,
   provider
 );
 
-async function getContractDetails(user) {
-  console.log(`🔍 Fetching details for user: ${user}`);
+// Function to fetch details from UserManagement contract
+async function getUserDetails(user) {
+  console.log(`🔍 Fetching user details from UserManagement for: ${user}`);
 
   try {
-    // Call each getter function
-    const isWhitelisted = await sunnySideActivity.isWhitelisted(user);
-    const isReferred = await sunnySideActivity.isReferred(user);
-    const totalPoints = await sunnySideActivity.getUserPoints(user);
-    const dailyQuestPoints = await sunnySideActivity.getDailyQuestPoints(user);
-    const activityPoints = await sunnySideActivity.getActivityPoints(user);
-
-    // Log the results
+    const isWhitelisted = await userManagement.isWhitelisted(user);
     console.log("✅ User Details:");
     console.log(`➡️ Is Whitelisted: ${isWhitelisted}`);
-    console.log(`➡️ Is Referred: ${isReferred}`);
-    console.log(`➡️ Total Points: ${totalPoints}`);
-    console.log(`➡️ Daily Quest Points: ${dailyQuestPoints}`);
-    console.log(`➡️ Activity Points: ${activityPoints}`);
   } catch (error) {
     console.error("❌ Error fetching user details:", error);
   }
 }
 
-async function getActivityName(activityId) {
+// Function to fetch points details from PointManagement contract
+async function getUserPoints(user) {
+  console.log(`🔍 Fetching user points from PointManagement for: ${user}`);
+
   try {
-    const activityName = await sunnySideActivity.getActivityName(activityId);
-    console.log(`➡️ Activity Name [ID: ${activityId}]: ${activityName}`);
-    return activityName;
+    const totalPoints = await pointManagement.getUserPoints(user);
+    const dailyQuestPoints = await pointManagement.getDailyQuestPoints(user);
+    const activityPoints = await pointManagement.getActivityPoints(user);
+
+    console.log("✅ User Points:");
+    console.log(`➡️ Total Points: ${totalPoints}`);
+    console.log(`➡️ Daily Quest Points: ${dailyQuestPoints}`);
+    console.log(`➡️ Activity Points: ${activityPoints}`);
   } catch (error) {
-    console.error(
-      `❌ Error fetching activity name for ID ${activityId}:`,
-      error
-    );
+    console.error("❌ Error fetching user points:", error);
   }
 }
 
 // Example Usage
 (async () => {
-  const USER_ADDRESS = "0x5e5Af5dc3Cc3c93FA8347fA98eddc942162d0Cbf"; // Replace with the user's address
+  const USER_ADDRESS = "0x306563D12A1ee361280884d8Cf68b14c0d34908b"; // Replace with the user's address
 
-  // Fetch user details
-  await getContractDetails(USER_ADDRESS);
+  // Fetch details from UserManagement contract
+  await getUserDetails(USER_ADDRESS);
 
-  // Fetch activity names (example IDs: 0, 1, 2, 3, 4)
-  for (let i = 0; i <= 4; i++) {
-    await getActivityName(i);
-  }
+  // Fetch points details from PointManagement contract
+  await getUserPoints(USER_ADDRESS);
 })();
